@@ -127,7 +127,7 @@
                   </tr>
                 </tbody>
               </table>
-              <p class="note">※ 商用利用は +¥3,000 / 1h<br />※ プレオープン価格で最大¥7,000オフ！</p>
+              <p class="note">【商用利用可】<br />※ プレオープン価格で最大¥7,000オフ！</p>
             </section>
           </div>
         </section>
@@ -185,7 +185,7 @@
     <FadeInOnScroll class="grid" direction="up">
       <img
         class="grid-img"
-        v-for="image in images"
+        v-for="(image, index) in images"
         :key="index"
         :src="image"
         alt="作品集"
@@ -235,6 +235,12 @@
     { img: '/intro-img1.jpg', color: '#FF3399' },
     { img: '/intro-img2.jpg', color: '#0033FF' },
     { img: '/intro-img3.jpg', color: '#FF9900' },
+    { img: '/intro-img4.jpg', color: '#FF3399' },
+    { img: '/intro-img5.jpg', color: '#0033FF' },
+    { img: '/intro-img6.jpg', color: '#FF9900' },
+    { img: '/intro-img7.jpg', color: '#FF3399' },
+    { img: '/intro-img8.jpg', color: '#0033FF' },
+    { img: '/intro-img9.jpg', color: '#FF9900' },
   ]
   
   const currentIndex = ref(0)
@@ -254,7 +260,7 @@
   })
   
   // グリッド
-  const images = ['/intro-img1.jpg', '/intro-img2.jpg', '/intro-img3.jpg']
+  const images = ['/intro-img1.jpg', '/intro-img2.jpg', '/intro-img3.jpg', '/intro-img4.jpg', '/intro-img5.jpg', '/intro-img6.jpg', '/intro-img7.jpg', '/intro-img8.jpg', '/intro-img9.jpg']
   </script>
   
   <style>
