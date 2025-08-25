@@ -1,29 +1,46 @@
-# tbd
+# studio_wolf
 
-This template should help get you started developing with Vue 3 in Vite.
+撮影スタジオ狼の公式サイト
 
-## Recommended IDE Setup
+## 概要
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+コスプレイヤーによる、コスプレイヤーのための撮影スタジオ「撮影スタジオ狼」の公式ウェブサイトです。
 
-## Customize configuration
+## 技術スタック
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+- Vue 3
+- Vite
+- HTML/CSS/JavaScript
 
-## Project Setup
+## 開発環境のセットアップ
 
+### 必要な環境
+- Node.js
+- npm
+
+### インストール
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
-
+### 開発サーバーの起動
 ```sh
 npm run dev
 ```
 
-### Compile and Minify for Production
-
+### 本番ビルド
 ```sh
 npm run build
 ```
+
+## 機能
+
+- レスポンシブデザイン
+- スライドショー
+- 料金表表示
+- LINE予約システム
+- Google Maps連携
+
+## ライセンス
+
+このプロジェクトは商用利用可能です。
