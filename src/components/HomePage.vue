@@ -49,7 +49,7 @@
       <div class="slide-content">
         <a href="#header"><img :src="currentSlide.img" alt="スタジオの外観" loading="lazy" /></a>
         <h2 class="consept-sub">
-          コスプレイヤーによる<br />コスプレイヤーのための<br />コスプレスタジオ
+          頑張るあなたのためのスタジオ<br />SNS・コンカフェ・配信・TikTok撮影<br />あなたの世界を形にします
         </h2>
       </div>
     </section>
@@ -70,65 +70,31 @@
       <FadeInOnScroll direction="right">
         <section class="box box-b" id="price">
           <h2>PRICE</h2>
-          <div class="table-wrapper">
-            <section class="price-table">
-              <h2>プレオープン料金表</h2>
-              <table>
-                <thead>
-                  <tr>
-                    <th>時間</th>
-                    <th>料金</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>3h</td>
-                    <td>¥10,000</td>
-                  </tr>
-                  <tr>
-                    <td>4h</td>
-                    <td>¥13,000</td>
-                  </tr>
-                  <tr>
-                    <td>5h</td>
-                    <td>¥16,000</td>
-                  </tr>
-                  <tr>
-                    <td>6h</td>
-                    <td>¥19,000</td>
-                  </tr>
-                  <tr>
-                    <td>7h</td>
-                    <td>¥22,000</td>
-                  </tr>
-                  <tr>
-                    <td>8h</td>
-                    <td>¥25,000</td>
-                  </tr>
-                  <tr>
-                    <td>9h</td>
-                    <td>¥28,000</td>
-                  </tr>
-                  <tr>
-                    <td>10h</td>
-                    <td>¥31,000</td>
-                  </tr>
-                  <tr>
-                    <td>11h</td>
-                    <td>¥34,000</td>
-                  </tr>
-                  <tr>
-                    <td>12h</td>
-                    <td>¥37,000</td>
-                  </tr>
-                  <tr>
-                    <td>深夜プラン（22:00〜翌8:00）</td>
-                    <td>¥20,000</td>
-                  </tr>
-                </tbody>
-              </table>
-              <p class="note">【商用利用可】<br />※ プレオープン価格で最大¥7,000オフ！</p>
-            </section>
+          <div class="price-slideshow-wrapper">
+            <div class="price-slide-content">
+              <img :src="currentPriceSlide.img" alt="料金表" loading="lazy" />
+            </div>
+            
+            <!-- PRICE手動切り替えボタン -->
+            <div class="price-slide-controls">
+              <button @click="prevPriceSlide" class="price-slide-btn prev-price-btn" aria-label="前の料金表">
+                <i class="fa-solid fa-chevron-left"></i>
+              </button>
+              <button @click="nextPriceSlide" class="price-slide-btn next-price-btn" aria-label="次の料金表">
+                <i class="fa-solid fa-chevron-right"></i>
+              </button>
+            </div>
+            
+            <!-- PRICEインジケーター -->
+            <div class="price-slide-indicators">
+              <button 
+                v-for="(slide, index) in priceSlides" 
+                :key="index"
+                @click="currentPriceIndex = index"
+                :class="['price-indicator', { active: currentPriceIndex === index }]"
+                :aria-label="`料金表${index + 1}に移動`"
+              ></button>
+            </div>
           </div>
         </section>
       </FadeInOnScroll>
@@ -202,12 +168,19 @@
             <i class="fa-brands fa-line"></i>
           </a>
           <a
-            href="https://www.instagram.com/studiowolf25?igsh=MXVrN2t1NHRoN2Y4Zw=="
+            href="https://www.instagram.com/studio_wolf2025"
             alt="インスタグラム"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <i class="fa-brands fa-instagram"></i>
           </a>
-          <a href="" alt="X">
+          <a 
+            href="https://x.com/studiowolf2025" 
+            alt="X"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <i class="fa-brands fa-x-twitter"></i>
           </a>
         </section>
@@ -232,9 +205,8 @@
   
   // スライドショー
   const slides = [
-    { img: '/intro-img1.jpg', color: '#FF3399' },
-    { img: '/intro-img2.jpg', color: '#0033FF' },
     { img: '/intro-img3.jpg', color: '#FF9900' },
+    { img: '/intro-img2.jpg', color: '#0033FF' },
     { img: '/intro-img4.jpg', color: '#FF3399' },
     { img: '/intro-img5.jpg', color: '#0033FF' },
     { img: '/intro-img6.jpg', color: '#FF9900' },
@@ -261,6 +233,36 @@
   
   // グリッド
   const images = ['/intro-img1.jpg', '/intro-img2.jpg', '/intro-img3.jpg', '/intro-img4.jpg', '/intro-img5.jpg', '/intro-img6.jpg', '/intro-img7.jpg', '/intro-img8.jpg', '/intro-img9.jpg']
+  
+  // PRICE用スライドショー
+  const priceSlides = [
+    { img: '/price1.jpg' },
+    { img: '/price2.jpg' }
+  ]
+  
+  const currentPriceIndex = ref(0)
+  const currentPriceSlide = computed(() => priceSlides[currentPriceIndex.value])
+  const nextPriceSlide = () => {
+    currentPriceIndex.value = (currentPriceIndex.value + 1) % priceSlides.length
+  }
+  
+  const priceIntervalID = ref(null)
+  // 手動切り替え用の関数（PRICE用のみ）
+  const prevPriceSlide = () => {
+    currentPriceIndex.value = (currentPriceIndex.value - 1 + priceSlides.length) % priceSlides.length
+  }
+  
+  onMounted(() => {
+    // メインスライドショーは自動（3秒間隔）
+    intervalID.value = setInterval(() => {
+      nextSlide()
+    }, 3000)
+    
+    // PRICEスライドショーは手動のみ（自動切り替えなし）
+  })
+  onUnmounted(() => {
+    clearInterval(intervalID.value)
+  })
   </script>
   
   <style>
@@ -403,7 +405,7 @@
     margin: 0;
     padding: 0;
     color: white;
-    font-size: 30px;
+    font-size: 24px;
     opacity: 0.8;
     font-weight: bold;
     position: absolute;
@@ -417,6 +419,10 @@
     text-align: center;
     font-family: 'Hiragino Sans W7';
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+    line-height: 1.2;
+    max-width: 90%;
+    word-break: keep-all;
+    overflow-wrap: break-word;
   }
   
   .box {
@@ -460,6 +466,96 @@
     background: #ff3399;
     text-align: center;
     margin-left: auto;
+  }
+  
+  /* PRICEスライドショー */
+  .price-slideshow-wrapper {
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    background: white;
+    padding: 20px;
+  }
+  
+  .price-slide-content {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .price-slide-content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    transition: opacity 0.5s ease;
+    object-fit: contain;
+  }
+  
+  /* PRICEスライドショーコントロール */
+  .price-slide-controls {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+    z-index: 10;
+  }
+  
+  .price-slide-btn {
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .price-slide-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+  }
+  
+  /* PRICEインジケーター */
+  .price-slide-indicators {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+  }
+  
+  .price-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid #ff3399;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .price-indicator.active {
+    background: #ff3399;
+  }
+  
+  .price-indicator:hover {
+    background: rgba(255, 51, 153, 0.5);
   }
   
   .box-b > h2 {
@@ -637,6 +733,13 @@
     text-align: center;
   }
   
+  @media (min-width: 480px) {
+    .consept-sub {
+      font-size: 26px;
+      line-height: 1.3;
+    }
+  }
+
   @media (min-width: 768px) {
     /* ヘッダー */
     .top-bar-sp {
@@ -690,13 +793,13 @@
     }
   
     /* スライドショー */
-    .slideshow-wrapper {
-      transition: background-color 0.5s ease;
-      margin-top: 100px;
-      padding: 8px;
-      /* min-height: 300px; */
-      color: #333;
-    }
+      .slideshow-wrapper {
+    transition: background-color 0.5s ease;
+    margin-top: 100px;
+    padding: 8px;
+    /* min-height: 300px; */
+    color: #333;
+  }
   
     .slide-content {
       position: relative;
@@ -716,6 +819,7 @@
     .consept-sub {
       font-size: 50px;
       top: 20%;
+      line-height: 1.4;
     }
   
     .box {
@@ -748,6 +852,17 @@
       background: #ff3399;
       text-align: center;
       margin-left: auto;
+    }
+    
+    /* PRICEスライドショー（タブレット） */
+    .price-slideshow-wrapper {
+      max-width: 90%;
+      margin: 30px auto;
+      padding: 30px;
+    }
+    
+    .price-slide-content img {
+      max-height: 500px;
     }
   
     .box-b > h2 {
@@ -906,6 +1021,7 @@
     .consept-sub {
       top: 30%;
       font-size: 100px;
+      line-height: 1.5;
     }
   
     .box > h1 {
@@ -946,6 +1062,17 @@
       margin: 30px;
       height: 350px;
       width: 350px;
+    }
+    
+    /* PRICEスライドショー（デスクトップ） */
+    .price-slideshow-wrapper {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 40px;
+    }
+    
+    .price-slide-content img {
+      max-height: 600px;
     }
   }
   </style>
