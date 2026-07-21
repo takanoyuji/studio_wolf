@@ -1,0 +1,45 @@
+{
+  "name": "スタジオ狼（STUDIO WOLF）",
+  "nameShort": "スタジオ狼",
+  "nameEn": "STUDIO WOLF",
+  "url": "https://studio-wolf.site",
+  "description": "大阪・日本橋のコスプレ撮影スタジオ「スタジオ狼（STUDIO WOLF）」。白ホリゾント・更衣室完備、近鉄日本橋駅から徒歩6分。シェア1時間1,000円〜、貸切・配信者向けソロプランもLINEから予約できます。",
+  "ogImage": "/intro-img3.jpg",
+
+  "address": {
+    "postalCode": "556-0005",
+    "region": "大阪府",
+    "locality": "大阪市浪速区",
+    "street": "日本橋3丁目1-18 菊乃好ビル4階",
+    "full": "〒556-0005 大阪府大阪市浪速区日本橋3丁目1-18 菊乃好ビル4階"
+  },
+  "geo": { "lat": 34.6608947, "lng": 135.5031436 },
+  "access": [
+    "近鉄日本橋駅から徒歩6分",
+    "なんば駅から徒歩11分",
+    "近隣にコインパーキングあり"
+  ],
+  "opens": "12:00",
+  "closes": "01:00",
+  "priceRange": "¥1,000-¥35,000",
+
+  "links": {
+    "line": "https://lin.ee/UblIDG8",
+    "instagram": "https://www.instagram.com/studio_wolf2025",
+    "x": "https://x.com/studiowolf2025",
+    "instabase": "https://www.instabase.jp/space/6514837038",
+    "map": "https://maps.app.goo.gl/",
+    "mapEmbed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6563.509613604946!2d135.50314355!3d34.6608947!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6000e742446b2055%3A0x4a890021a83a6e86!2z6I-K5LmL5aW977yI5qCq77yJ!5e0!3m2!1sja!2sjp!4v1747811546241!5m2!1sja!2sjp"
+  },
+
+  "facilities": [
+    { "name": "白ホリゾント", "note": "コスプレ・宣材・物撮りに使える白背景" },
+    { "name": "更衣室・メイクスペース", "note": "着替えとメイク直しがそのままできる" },
+    { "name": "大型姿見", "note": "全身の衣装チェック用" },
+    { "name": "床材切替（フローリング／カーペット）", "note": "追加料金なし" },
+    { "name": "撮影小物・ライティング", "note": "ポップな世界観から非日常シーンまで" },
+    { "name": "Wi-Fi・エアコン完備", "note": "長時間のライブ配信にも対応" },
+    { "name": "ライブ配信対応", "note": "配信者向けソロプランあり（最長25時まで）" },
+    { "name": "広さ40㎡／1〜8名", "note": "ソロ撮影から少人数の併せまで" }
+  ]
+}

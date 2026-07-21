@@ -1,0 +1,84 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import site from '../data/site.json'
+
+const title = '特定商取引法に基づく表記｜スタジオ狼（STUDIO WOLF）'
+const description =
+  'スタジオ狼（STUDIO WOLF）の特定商取引法に基づく表記。販売事業者・所在地・お支払い方法・キャンセルについて記載しています。'
+
+const items = [
+  { term: '販売事業者', desc: '合同会社データロー' },
+  { term: '所在地', desc: '東京都新宿区西新宿7-5-9 ファーストリアルタワー新宿2901' },
+  { term: '販売責任者', desc: '代表社員 高野悠司' },
+  { term: '販売価格', desc: '当ウェブサイトの料金ページに記載' },
+  { term: 'お支払い方法', desc: 'クレジットカード・PayPay・銀行振込' },
+  { term: 'お支払い時期', desc: '予約時' },
+  { term: 'キャンセル', desc: '購入後のキャンセル・返金はできません' },
+]
+---
+
+<BaseLayout title={title} description={description} path="/tokusho">
+  <main class="tokusho-page">
+    <h1>特定商取引法に基づく表記</h1>
+    <dl class="inner-page">
+      {
+        items.map((item) => (
+          <div class="item">
+            <dt>{item.term}</dt>
+            <dd>{item.desc}</dd>
+          </div>
+        ))
+      }
+      <div class="item">
+        <dt>お問い合わせ</dt>
+        <dd>
+          <a href={site.links.line} target="_blank" rel="noopener noreferrer">公式LINE</a>・
+          <a href="mailto:takano@dataraw.jp">takano@dataraw.jp</a>
+        </dd>
+      </div>
+    </dl>
+    <p class="back"><a href="/">トップページへ戻る</a></p>
+  </main>
+</BaseLayout>
+
+<style>
+  .tokusho-page {
+    margin: 2rem auto;
+    padding: 1rem;
+    max-width: 720px;
+    line-height: 1.6;
+    border: 1px solid #ccc;
+  }
+
+  .tokusho-page h1 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+
+  .inner-page {
+    padding: 0;
+    width: fit-content;
+    margin: 0.5rem auto;
+  }
+
+  .item {
+    margin-bottom: 0.5rem;
+    text-align: left;
+  }
+
+  .item dt {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .item dd {
+    margin: 0 0 0.5rem;
+  }
+
+  .back {
+    text-align: center;
+    margin-top: 1.5rem;
+  }
+</style>
