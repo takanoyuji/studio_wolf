@@ -198,14 +198,18 @@ const jsonLd = {
                     </tr>
                   </thead>
                   <tbody>
-                    {group.rows.map((row) => (
-                      <tr>
-                        <th scope="row">{row.label}</th>
-                        {row.values.map((value) => (
-                          <td>{value}</td>
-                        ))}
-                      </tr>
-                    ))}
+                    {group.rows.map((row) => {
+                      // 値の列が行見出しの右から始まるため、対応する列名をずらして取得する
+                      const valueColumnOffset = group.columns.length - row.values.length
+                      return (
+                        <tr>
+                          <th scope="row">{row.label}</th>
+                          {row.values.map((value, i) => (
+                            <td data-label={group.columns[valueColumnOffset + i]}>{value}</td>
+                          ))}
+                        </tr>
+                      )
+                    })}
                   </tbody>
                 </table>
               </div>
@@ -513,7 +517,7 @@ const jsonLd = {
     margin: 24px 0;
     padding: 16px;
     font-size: 20px;
-    width: 80%;
+    width: 92%;
   }
 
   .box > h2 {
@@ -615,7 +619,6 @@ const jsonLd = {
   }
 
   .table-wrapper {
-    overflow-x: auto;
     width: 100%;
   }
 
@@ -625,26 +628,55 @@ const jsonLd = {
     font-size: 14px;
   }
 
-  .price-table th,
-  .price-table td {
-    padding: 0.6em 0.5em;
-    border: 1px solid #ccc;
-    text-align: center;
+  /* スマホでは表を横スクロールさせず、1行=1カードの縦積みで表示する */
+  .price-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 
-  .price-table thead th {
-    background: #ffe3ef;
-    white-space: nowrap;
+  .price-table tbody tr {
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: #fff;
+    padding: 10px 12px;
+  }
+
+  .price-table tbody tr + tr {
+    margin-top: 10px;
   }
 
   .price-table tbody th {
+    display: block;
     text-align: left;
-    font-weight: normal;
+    font-weight: bold;
+    line-height: 1.5;
+    padding: 0 0 8px;
+    border-bottom: 1px dashed #e3c3d3;
   }
 
-  .price-table td {
-    white-space: nowrap;
+  .price-table tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    text-align: right;
     font-weight: bold;
+    padding: 8px 0 0;
+    line-height: 1.5;
+  }
+
+  .price-table tbody td::before {
+    content: attr(data-label);
+    font-weight: normal;
+    color: #d1176f;
+    text-align: left;
+    white-space: nowrap;
   }
 
   .price-table .note {
@@ -864,6 +896,7 @@ const jsonLd = {
       margin: 80px 0;
       padding: 16px 40px;
       font-size: 1.5rem;
+      width: 80%;
     }
 
     .box > h2 {
@@ -886,8 +919,62 @@ const jsonLd = {
       font-size: 24px;
     }
 
+    /* タブレット以上は通常の表組みに戻す */
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
     .price-table table {
       font-size: 16px;
+    }
+
+    .price-table thead {
+      position: static;
+      width: auto;
+      height: auto;
+      overflow: visible;
+      clip: auto;
+      clip-path: none;
+    }
+
+    .price-table thead th {
+      background: #ffe3ef;
+      white-space: nowrap;
+      padding: 0.6em 0.5em;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+
+    .price-table tbody tr {
+      display: table-row;
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      padding: 0;
+    }
+
+    .price-table tbody tr + tr {
+      margin-top: 0;
+    }
+
+    .price-table tbody th {
+      display: table-cell;
+      font-weight: normal;
+      text-align: left;
+      padding: 0.6em 0.5em;
+      border: 1px solid #ccc;
+    }
+
+    .price-table tbody td {
+      display: table-cell;
+      text-align: center;
+      padding: 0.6em 0.5em;
+      border: 1px solid #ccc;
+      white-space: nowrap;
+    }
+
+    .price-table tbody td::before {
+      content: none;
     }
 
     .price-lead,
