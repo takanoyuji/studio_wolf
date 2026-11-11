@@ -1,0 +1,245 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import site from '../data/site.json'
+import { studioJsonLd } from '../lib/jsonld'
+
+const title = 'ご利用案内｜スタジオ狼（STUDIO WOLF）大阪・日本橋の撮影スタジオ'
+const description =
+  'スタジオ狼のご利用案内。24時間・有人／無人の営業、商用利用のクレジット表記、お支払い方法、キャンセル・日時変更、入退室、清掃・飲食・靴・動画撮影のルール。'
+
+const sections = [
+  {
+    id: 'hours',
+    head: '営業時間・スタッフ対応',
+    items: [
+      '貸切・シェアともに24時間ご利用いただけます。',
+      'スタッフの対応時間は日によって異なります。有人でのご利用をご希望の方は、事前に公式LINEでご確認ください。深夜もご相談に応じて対応できる場合があります。',
+      '無人でのご利用にも対応しています。公式LINEからのご予約は有人・無人のどちらも、スペースマーケット・インスタベースからのご予約は原則無人でのご利用です。',
+    ],
+  },
+  {
+    id: 'commercial',
+    head: '商用利用',
+    items: [
+      '全プランで商用利用できます。追加料金はかかりません。',
+      '商用利用の際は「Studio Wolf」のクレジット表記をお願いします。SNS・販売サイト・動画など、公開するすべての媒体にスタジオ名をご記載ください。',
+    ],
+  },
+  {
+    id: 'payment',
+    head: 'お支払い方法',
+    items: [
+      '現金・PayPay・クレジットカードがご利用いただけます。',
+      '無人でのご利用は事前決済のみです。公式LINEからの無人予約は、クレジットカードの決済リンクをお送りしますので、ご利用前にお支払いください。',
+      'スペースマーケット・インスタベースからのご予約は、各サイトの決済方法に従います。',
+    ],
+  },
+  {
+    id: 'cancel',
+    head: 'キャンセル・日時変更',
+    table: [
+      ['ご利用日の2日前まで', '無料'],
+      ['前日', 'ご利用料金の50％'],
+      ['当日', 'ご利用料金の100％'],
+    ],
+    items: [
+      '上の表は公式LINE・当サイトから直接ご予約いただいた場合の規定です。',
+      'スペースマーケット・インスタベースからのご予約は、各サイトに掲載のキャンセル規定が適用されます。',
+      '日時の変更は、予約枠に空きがあれば前日・当日でも無料で承ります。',
+    ],
+  },
+  {
+    id: 'entry',
+    head: '入退室（無人でのご利用）',
+    items: [
+      'スマートロックの暗証番号で入室していただきます。',
+      '入室方法は、ご予約の確定後に個別にご案内します。',
+    ],
+  },
+  {
+    id: 'rules',
+    head: 'スタジオ利用ルール',
+    groups: [
+      {
+        sub: '清掃・原状回復',
+        items: [
+          '使用した家具・撮影小物・備品は元の位置に戻してください。',
+          'ご利用後は簡単な清掃をお願いします。',
+          'ゴミはすべてお持ち帰りください。',
+        ],
+      },
+      {
+        sub: '飲食',
+        items: [
+          '飲食物の持ち込み・スタジオ内での飲食ができます。',
+          '設備や衣装を汚さないようご注意ください。',
+          '飲食後の清掃とゴミのお持ち帰りをお願いします。',
+        ],
+      },
+      {
+        sub: '靴',
+        items: ['外履きの靴も撮影に使えます。使用前に靴底の清掃と養生をお願いします。'],
+      },
+      {
+        sub: '動画撮影・ライブ配信',
+        items: ['貸切でのご利用時のみ可能です。シェアプランではご利用いただけません。'],
+      },
+      {
+        sub: 'ご利用人数',
+        items: ['通常1〜8名です。8名を超える場合は事前にご相談ください。'],
+      },
+    ],
+  },
+]
+---
+
+<BaseLayout title={title} description={description} path="/guide" jsonLd={studioJsonLd}>
+  <main class="page star-bg">
+    <div class="section-inner">
+      <p class="page-en">GUIDE</p>
+      <h1 class="section-title gradient-text">ご利用案内</h1>
+      <nav class="toc" aria-label="目次">
+        {sections.map((s) => <a href={`#${s.id}`}>{s.head}</a>)}
+      </nav>
+
+      {
+        sections.map((s) => (
+          <section class="guide glass" id={s.id}>
+            <h2>{s.head}</h2>
+            {s.table && (
+              <table>
+                <tbody>
+                  {s.table.map(([when, fee]) => (
+                    <tr>
+                      <th scope="row">{when}</th>
+                      <td>{fee}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+            {s.items && (
+              <ul>
+                {s.items.map((i) => (
+                  <li>{i}</li>
+                ))}
+              </ul>
+            )}
+            {s.groups &&
+              s.groups.map((g) => (
+                <div class="rule-group">
+                  <h3>{g.sub}</h3>
+                  <ul>
+                    {g.items.map((i) => (
+                      <li>{i}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+          </section>
+        ))
+      }
+
+      <div class="page-actions">
+        <a href={site.links.line} class="btn-line" target="_blank" rel="noopener noreferrer">
+          <i class="fa-brands fa-line" aria-hidden="true"></i> 公式LINEで予約・相談
+        </a>
+        <a href="/" class="btn-secondary">トップへ戻る</a>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .page {
+    padding: calc(var(--header-h) + 40px) 16px 72px;
+    min-height: 60vh;
+  }
+
+  .page-en {
+    text-align: center;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    color: var(--star-300);
+  }
+
+  .toc {
+    max-width: 760px;
+    margin: 0 auto 28px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .toc a {
+    font-size: 0.8rem;
+    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .toc a:hover {
+    border-color: var(--neon-violet);
+  }
+
+  .guide {
+    max-width: 760px;
+    margin: 0 auto 16px;
+    padding: 22px 20px;
+  }
+
+  .guide h2 {
+    font-size: 1.15rem;
+    margin-bottom: 10px;
+    padding-left: 12px;
+    border-left: 4px solid var(--neon-purple);
+  }
+
+  .guide h3 {
+    font-size: 0.95rem;
+    margin: 14px 0 4px;
+    color: var(--star-300);
+  }
+
+  .guide ul {
+    padding-left: 1.2em;
+    color: var(--fg-muted);
+    font-size: 0.92rem;
+  }
+
+  .guide li + li {
+    margin-top: 4px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 12px;
+  }
+
+  th,
+  td {
+    padding: 10px 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    text-align: left;
+  }
+
+  th {
+    font-weight: 400;
+  }
+
+  td {
+    font-weight: 700;
+    text-align: right;
+  }
+
+  .page-actions {
+    max-width: 560px;
+    margin: 32px auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+</style>

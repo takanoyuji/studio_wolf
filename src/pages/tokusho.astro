@@ -10,10 +10,10 @@ const items = [
   { term: '販売事業者', desc: '合同会社データロー' },
   { term: '所在地', desc: '東京都新宿区西新宿7-5-9 ファーストリアルタワー新宿2901' },
   { term: '販売責任者', desc: '代表社員 高野悠司' },
-  { term: '販売価格', desc: '当ウェブサイトの料金ページに記載' },
-  { term: 'お支払い方法', desc: 'クレジットカード・PayPay・銀行振込' },
-  { term: 'お支払い時期', desc: '予約時' },
-  { term: 'キャンセル', desc: '購入後のキャンセル・返金はできません' },
+  { term: '販売価格', desc: '当ウェブサイトの料金ページ（/price）に記載（税込）' },
+  { term: 'お支払い方法', desc: '現金・PayPay・クレジットカード（スペースマーケット・インスタベースからのご予約は各サイトの決済方法）' },
+  { term: 'お支払い時期', desc: 'ご利用時。無人でのご利用は事前決済のみ（公式LINEからのご予約はクレジットカード決済リンクでご利用前にお支払い）' },
+  { term: 'キャンセル', desc: '公式LINE・当サイトからのご予約：ご利用日の2日前まで無料／前日 ご利用料金の50％／当日 ご利用料金の100％。スペースマーケット・インスタベースからのご予約は各サイトのキャンセル規定に従います。日時の変更は、空きがあれば前日・当日でも無料です。' },
 ]
 ---
 
@@ -43,11 +43,12 @@ const items = [
 
 <style>
   .tokusho-page {
-    margin: 2rem auto;
-    padding: 1rem;
+    margin: calc(var(--header-h) + 2rem) auto 2rem;
+    padding: 1.5rem;
     max-width: 720px;
     line-height: 1.6;
-    border: 1px solid #ccc;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 1rem;
   }
 
   .tokusho-page h1 {
@@ -58,7 +59,6 @@ const items = [
 
   .inner-page {
     padding: 0;
-    width: fit-content;
     margin: 0.5rem auto;
   }
 
@@ -70,11 +70,12 @@ const items = [
   .item dt {
     font-size: 1rem;
     font-weight: bold;
-    color: #333;
+    color: var(--star-300);
   }
 
   .item dd {
     margin: 0 0 0.5rem;
+    color: var(--fg-muted);
   }
 
   .back {

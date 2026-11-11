@@ -1,0 +1,187 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import site from '../data/site.json'
+import data from '../data/costumes.json'
+import { studioJsonLd } from '../lib/jsonld'
+
+const title = 'レンタル衣装｜スタジオ狼（STUDIO WOLF）大阪・日本橋の撮影スタジオ'
+const description =
+  'スタジオ狼のレンタル衣装。1名2着まで無料、3着目以降は1着1,000円（税込）。マリームーンの衣装や男装用の衣装もあります。貸出はスタッフ対応時のみです。'
+
+type Costume = { name: string; photo: string; size: string; dansou: boolean }
+const items = data.items as Costume[]
+---
+
+<BaseLayout title={title} description={description} path="/costume" jsonLd={studioJsonLd}>
+  <main class="page star-bg">
+    <div class="section-inner">
+      <p class="page-en">COSTUME</p>
+      <h1 class="section-title gradient-text">レンタル衣装</h1>
+
+      <section class="rules glass">
+        <dl>
+          <div>
+            <dt>1〜2着目</dt>
+            <dd class="gradient-text">無料</dd>
+          </div>
+          <div>
+            <dt>3着目以降</dt>
+            <dd>1着 1,000円<small>（税込）</small></dd>
+          </div>
+        </dl>
+        <ul class="note-list">
+          <li>料金は1名あたりです。マリームーンの衣装も無料の対象です。</li>
+          <li>衣装の貸出はスタッフ対応（有人）のときのみです。</li>
+          <li>スペースマーケット・インスタベースからご予約の方も、公式LINEで事前にご相談いただき、スタッフが対応できる場合はお貸しできます。</li>
+          <li>飲食の際は衣装を汚さないようご注意ください。</li>
+        </ul>
+      </section>
+
+      <h2 class="sub-title">衣装一覧</h2>
+      {
+        items.length > 0 ? (
+          <ul class="costume-grid">
+            {items.map((c) => (
+              <li class="costume glass">
+                <div class="costume-photo">
+                  <img src={c.photo} alt={c.name} width="600" height="800" loading="lazy" />
+                  {c.dansou && <span class="tag">男装</span>}
+                </div>
+                <div class="costume-body">
+                  <p class="costume-name">{c.name}</p>
+                  <p class="costume-size">サイズ：{c.size}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div class="placeholder empty glass">衣装一覧は準備中です</div>
+        )
+      }
+
+      <div class="page-actions">
+        <a href={site.links.line} class="btn-line" target="_blank" rel="noopener noreferrer">
+          <i class="fa-brands fa-line" aria-hidden="true"></i> 公式LINEで衣装を相談
+        </a>
+        <a href="/" class="btn-secondary">トップへ戻る</a>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .page {
+    padding: calc(var(--header-h) + 40px) 16px 72px;
+    min-height: 60vh;
+  }
+
+  .page-en {
+    text-align: center;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    color: var(--star-300);
+  }
+
+  .rules {
+    max-width: 640px;
+    margin: 24px auto 0;
+    padding: 24px 20px;
+  }
+
+  .rules dl {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .rules dt {
+    font-size: 0.8rem;
+    color: var(--fg-faint);
+  }
+
+  .rules dd {
+    font-size: 1.5rem;
+    font-weight: 900;
+  }
+
+  .rules small {
+    font-size: 0.7rem;
+    font-weight: 400;
+  }
+
+  .sub-title {
+    text-align: center;
+    font-size: 1.4rem;
+    margin: 48px 0 20px;
+  }
+
+  .costume-grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  @media (min-width: 768px) {
+    .costume-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .costume {
+    overflow: hidden;
+  }
+
+  .costume-photo {
+    position: relative;
+    aspect-ratio: 3 / 4;
+  }
+
+  .costume-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .tag {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: var(--neon-violet);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 9999px;
+  }
+
+  .costume-body {
+    padding: 10px 12px 12px;
+  }
+
+  .costume-name {
+    font-weight: 700;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .costume-size {
+    font-size: 0.78rem;
+    color: var(--fg-muted);
+  }
+
+  .empty {
+    max-width: 640px;
+    margin: 0 auto;
+    height: 200px;
+  }
+
+  .page-actions {
+    max-width: 560px;
+    margin: 40px auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+</style>

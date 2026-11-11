@@ -5,6 +5,17 @@ const { title, description, path = '/', ogImage = site.ogImage, jsonLd } = Astro
 
 const canonical = new URL(path, Astro.site ?? site.url).href
 const ogImageUrl = new URL(ogImage, Astro.site ?? site.url).href
+
+// ヘッダーのメニュー。トップ以外のページからも飛べるよう / 始まりで書く
+const nav = [
+  { href: '/#menu', label: 'MENU' },
+  { href: '/price', label: '料金' },
+  { href: '/interior', label: '内装' },
+  { href: '/costume', label: '衣装' },
+  { href: '/#reserve', label: '予約' },
+  { href: '/guide', label: '利用案内' },
+  { href: '/#access', label: 'アクセス' },
+]
 ---
 
 <!doctype html>
@@ -36,14 +47,66 @@ const ogImageUrl = new URL(ogImage, Astro.site ?? site.url).href
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap"
       rel="stylesheet"
     />
 
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   </head>
   <body>
+    <header class="site-header" id="header">
+      <a href="/" class="brand" aria-label="スタジオ狼 トップへ">
+        <img src="/logo.png" alt="" width="64" height="48" />
+        <span>スタジオ狼</span>
+      </a>
+      <button class="menu-button" type="button" aria-label="メニューを開く" aria-expanded="false" aria-controls="site-nav">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="site-nav" class="site-nav" aria-label="メインメニュー">
+        <ul>
+          {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+          <li>
+            <a href={site.links.line} class="nav-line" target="_blank" rel="noopener noreferrer">LINEで予約</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
     <slot />
+
+    <footer class="site-footer">
+      <img src="/logo.png" alt="スタジオ狼（STUDIO WOLF）ロゴ" class="footer-logo" width="140" height="106" loading="lazy" />
+      <div class="sns-icons" aria-label="SNS・予約リンク">
+        <a href={site.links.line} aria-label="LINE" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-line"></i></a>
+        <a href={site.links.instagram} aria-label="Instagram" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i></a>
+        <a href={site.links.x} aria-label="X" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-x-twitter"></i></a>
+      </div>
+      <p class="footer-address">{site.address.full}</p>
+      <p class="footer-links">
+        <a href="/guide">ご利用案内</a>
+        <a href="/tokusho">特定商取引法に基づく表記</a>
+      </p>
+      <small>© 2025 スタジオ狼（STUDIO WOLF）</small>
+    </footer>
+
+    <!-- スマホで常に見える予約ボタン -->
+    <a href={site.links.line} class="floating-line" target="_blank" rel="noopener noreferrer">
+      <i class="fa-brands fa-line" aria-hidden="true"></i> LINEで予約
+    </a>
+
+    <script>
+      const button = document.querySelector<HTMLButtonElement>('.menu-button')
+      const navEl = document.querySelector<HTMLElement>('.site-nav')
+      const setOpen = (open: boolean) => {
+        if (!button || !navEl) return
+        navEl.classList.toggle('open', open)
+        button.classList.toggle('open', open)
+        button.setAttribute('aria-expanded', String(open))
+        button.setAttribute('aria-label', open ? 'メニューを閉じる' : 'メニューを開く')
+      }
+      button?.addEventListener('click', () => setOpen(!navEl?.classList.contains('open')))
+      navEl?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)))
+    </script>
     <script
       src="https://kit.fontawesome.com/6be5be9e46.js"
       crossorigin="anonymous"
@@ -53,13 +116,35 @@ const ogImageUrl = new URL(ogImage, Astro.site ?? site.url).href
 </html>
 
 <style is:global>
+  /* 星狼（xing-lang.com）の配色・部品を移植。ライトモード切替は持たない */
   :root {
-    --header-height: 90px;
+    --night-950: #06040f;
+    --night-900: #0d0820;
+    --night-800: #160e3a;
+    --night-700: #1e1354;
+    --neon-purple: #c026d3;
+    --neon-violet: #7c3aed;
+    --neon-pink: #ec4899;
+    --star-400: #fbbf24;
+    --star-300: #fde68a;
+    --line-green: #06c755;
+    --fg: #f0eafa;
+    --fg-muted: rgba(240, 234, 250, 0.7);
+    --fg-faint: rgba(240, 234, 250, 0.45);
+    --header-h: 64px;
   }
 
-  * {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: var(--header-h);
   }
 
   html,
@@ -69,6 +154,347 @@ const ogImageUrl = new URL(ogImage, Astro.site ?? site.url).href
   }
 
   body {
+    background: var(--night-950);
+    color: var(--fg);
     font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
+    line-height: 1.7;
+  }
+
+  img {
+    max-width: 100%;
+    display: block;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  .glass {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 1rem;
+  }
+
+  .star-bg {
+    background:
+      radial-gradient(ellipse at top, var(--night-800) 0%, var(--night-950) 60%),
+      radial-gradient(ellipse at bottom right, var(--night-900) 0%, transparent 60%);
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, var(--star-400) 0%, var(--neon-purple) 50%, var(--neon-violet) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-neon-glow {
+    text-shadow: 0 0 10px rgba(192, 38, 211, 0.6), 0 0 30px rgba(124, 58, 237, 0.4);
+  }
+
+  .section {
+    padding: 72px 16px;
+  }
+
+  .section-inner {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    margin-bottom: 8px;
+  }
+
+  .section-sub {
+    text-align: center;
+    color: var(--fg-muted);
+    font-size: 0.9rem;
+    margin-bottom: 36px;
+  }
+
+  .btn-primary,
+  .btn-secondary,
+  .btn-line {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0.8rem 2rem;
+    border-radius: 9999px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s, border-color 0.2s;
+    min-height: 48px;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--neon-violet), var(--neon-purple));
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(192, 38, 211, 0.6);
+  }
+
+  .btn-secondary {
+    color: var(--fg);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--neon-violet);
+    background: rgba(124, 58, 237, 0.15);
+  }
+
+  .btn-line {
+    background: var(--line-green);
+    color: #fff;
+  }
+
+  .btn-line:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(6, 199, 85, 0.5);
+  }
+
+  .note-list {
+    list-style: none;
+    color: var(--fg-muted);
+    font-size: 0.875rem;
+  }
+
+  .note-list li {
+    padding-left: 1em;
+    text-indent: -1em;
+  }
+
+  .note-list li::before {
+    content: '※';
+  }
+
+  .placeholder {
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(circle at 30% 20%, rgba(192, 38, 211, 0.25), transparent 60%),
+      radial-gradient(circle at 80% 90%, rgba(124, 58, 237, 0.3), transparent 60%),
+      var(--night-900);
+    color: var(--fg-faint);
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .back-link {
+    text-align: center;
+    margin-top: 48px;
+  }
+
+  /* ヘッダー */
+  .site-header {
+    position: fixed;
+    inset: 0 0 auto 0;
+    height: var(--header-h);
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    background: rgba(6, 4, 15, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(124, 58, 237, 0.3);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+  }
+
+  .brand img {
+    width: 52px;
+    height: auto;
+  }
+
+  .menu-button {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .menu-button span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--fg);
+    transition: transform 0.25s, opacity 0.25s;
+  }
+
+  .menu-button.open span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+  .menu-button.open span:nth-child(2) {
+    opacity: 0;
+  }
+  .menu-button.open span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+
+  .site-nav {
+    position: fixed;
+    top: var(--header-h);
+    left: 0;
+    right: 0;
+    background: rgba(6, 4, 15, 0.96);
+    border-bottom: 1px solid rgba(124, 58, 237, 0.3);
+    display: none;
+  }
+
+  .site-nav.open {
+    display: block;
+  }
+
+  .site-nav ul {
+    list-style: none;
+    padding: 8px 16px 20px;
+  }
+
+  .site-nav a {
+    display: block;
+    padding: 12px 4px;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .site-nav .nav-line {
+    margin-top: 12px;
+    text-align: center;
+    border: none;
+    border-radius: 9999px;
+    background: var(--line-green);
+    font-weight: 700;
+  }
+
+  @media (min-width: 900px) {
+    .menu-button {
+      display: none;
+    }
+    .site-nav {
+      position: static;
+      display: block;
+      background: none;
+      border: none;
+    }
+    .site-nav ul {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0;
+    }
+    .site-nav a {
+      border: none;
+      padding: 8px 10px;
+      font-size: 0.9rem;
+      color: var(--fg-muted);
+    }
+    .site-nav a:hover {
+      color: #fff;
+    }
+    .site-nav .nav-line {
+      margin: 0 0 0 8px;
+      padding: 8px 18px;
+      color: #fff;
+    }
+  }
+
+  /* フッター */
+  .site-footer {
+    padding: 48px 16px 120px;
+    text-align: center;
+    background: var(--night-950);
+    border-top: 1px solid rgba(124, 58, 237, 0.3);
+    color: var(--fg-muted);
+    font-size: 0.85rem;
+  }
+
+  .footer-logo {
+    width: 140px;
+    height: auto;
+    margin: 0 auto 16px;
+  }
+
+  .sns-icons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    font-size: 1.8rem;
+    margin-bottom: 16px;
+  }
+
+  .sns-icons a {
+    color: var(--fg);
+    text-decoration: none;
+  }
+
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin: 12px 0;
+  }
+
+  /* 追従の予約ボタン（スマホのみ） */
+  .floating-line {
+    position: fixed;
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 52px;
+    border-radius: 9999px;
+    background: var(--line-green);
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+  }
+
+  @media (min-width: 900px) {
+    .floating-line {
+      display: none;
+    }
+    .site-footer {
+      padding-bottom: 48px;
+    }
   }
 </style>
