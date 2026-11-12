@@ -35,7 +35,7 @@
   },
 
   "_calendarNote": "予約管理カレンダーのID（例: xxxx@group.calendar.google.com）。公開設定は「予定の有無のみ」。空のあいだは準備中の表示になる",
-  "calendarId": "",
+  "calendarId": "studiowolf.25@gmail.com",
   "calendarNotice": "カレンダーの空き状況は目安です。予約状況の反映に時間がかかる場合がございます。ご予約の確定は各予約窓口からの案内をご確認ください。",
 
   "facilities": [
