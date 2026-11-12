@@ -2,7 +2,7 @@ import site from '../data/site.json'
 import pricing from '../data/pricing.json'
 
 // 料金データから構造化データ用のオファー一覧を組み立てる（数値化できる行のみ）
-const offers = pricing.groups.flatMap((group) =>
+const offers = pricing.groups.filter((group) => !group.hidden).flatMap((group) =>
   group.rows.flatMap((row) => {
     const priceIndex = group.columns.length - row.values.length
     return row.values

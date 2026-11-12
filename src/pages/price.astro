@@ -14,10 +14,10 @@ const description =
     <div class="section-inner">
       <p class="page-en">PRICE</p>
       <h1 class="section-title gradient-text">料金</h1>
-      <p class="section-sub">{pricing.taxNote}</p>
+      <p class="section-sub">{pricing.taxNote}<br />{pricing.externalNote}</p>
 
       {
-        pricing.groups.map((group) => (
+        pricing.groups.filter((group) => !group.hidden).map((group) => (
           <section class="price-group glass" id={group.id}>
             <h2>{group.title}</h2>
             {group.lead && <p class="price-lead">{group.lead}</p>}
