@@ -1,0 +1,195 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import site from '../data/site.json'
+import pricing from '../data/pricing.json'
+import { studioJsonLd } from '../lib/jsonld'
+
+const title = '料金｜スタジオ狼（STUDIO WOLF）大阪・日本橋の撮影スタジオ'
+const description =
+  'スタジオ狼の料金。シェアプランは平日1名1時間1,000円〜（深夜23時〜翌6時は25％増し）、最低2時間。全プラン商用利用OK・4ブース利用とレンタル衣装2着まで追加料金なし。'
+---
+
+<BaseLayout title={title} description={description} path="/price" jsonLd={studioJsonLd}>
+  <main class="page star-bg">
+    <div class="section-inner">
+      <p class="page-en">PRICE</p>
+      <h1 class="section-title gradient-text">料金</h1>
+      <p class="section-sub">{pricing.taxNote}<br />{pricing.externalNote}</p>
+
+      {
+        pricing.groups.filter((group) => !group.hidden).map((group) => (
+          <section class="price-group glass" id={group.id}>
+            <h2>{group.title}</h2>
+            {group.lead && <p class="price-lead">{group.lead}</p>}
+            {group.rows.length > 0 && (
+              <div class="table-wrapper">
+                {group.unit && <p class="price-unit">{group.unit}</p>}
+                <table>
+                  <thead>
+                    <tr>
+                      {group.columns.map((column) => (
+                        <th scope="col">{column}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {group.rows.map((row) => {
+                      const offset = group.columns.length - row.values.length
+                      return (
+                        <tr>
+                          <th scope="row">{row.label}</th>
+                          {row.values.map((value, i) => (
+                            <td data-label={group.columns[offset + i]}>{value}</td>
+                          ))}
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+            {group.notes.length > 0 && (
+              <ul class="note-list">
+                {group.notes.map((note) => (
+                  <li>{note}</li>
+                ))}
+              </ul>
+            )}
+          </section>
+        ))
+      }
+
+      <section class="price-group glass">
+        <h2>ご利用人数</h2>
+        <ul class="note-list">
+          {pricing.people.map((p) => <li>{p}</li>)}
+        </ul>
+      </section>
+
+      <p class="event-note">{pricing.eventNote}</p>
+
+      <div class="page-actions">
+        <a href={site.links.reserve} class="btn-primary">
+          <i class="fa-regular fa-calendar-check" aria-hidden="true"></i> Web予約（空き確認・お支払い）
+        </a>
+        <a href={site.links.line} class="btn-line" target="_blank" rel="noopener noreferrer">
+          <i class="fa-brands fa-line" aria-hidden="true"></i> 公式LINEで予約・相談
+        </a>
+        <a href="/guide" class="btn-secondary">お支払い・キャンセル規定</a>
+        <a href="/" class="btn-secondary">トップへ戻る</a>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .page {
+    padding: calc(var(--header-h) + 40px) 16px 72px;
+    min-height: 60vh;
+  }
+
+  .page-en {
+    text-align: center;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    color: var(--star-300);
+  }
+
+  .price-group {
+    max-width: 760px;
+    margin: 0 auto 20px;
+    padding: 24px 20px;
+  }
+
+  .price-group h2 {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+    padding-left: 12px;
+    border-left: 4px solid var(--neon-purple);
+  }
+
+  .price-lead {
+    color: var(--fg-muted);
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+  }
+
+  .price-unit {
+    font-size: 0.8rem;
+    color: var(--star-300);
+    margin-bottom: 4px;
+    text-align: right;
+  }
+
+  .table-wrapper {
+    margin-bottom: 12px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+  }
+
+  th,
+  td {
+    padding: 10px 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  thead th {
+    color: var(--fg-faint);
+    font-size: 0.78rem;
+    font-weight: 400;
+  }
+
+  td {
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  /* スマホでは横スクロールさせず、行を縦に積む（列数の多い表のみ） */
+  @media (max-width: 600px) {
+    #b2b thead,
+    #option thead {
+      display: none;
+    }
+    #b2b tr,
+    #option tr {
+      display: block;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    #b2b th,
+    #b2b td,
+    #option th,
+    #option td {
+      display: block;
+      border: none;
+      padding: 2px 0;
+      white-space: normal;
+    }
+    #b2b td::before {
+      content: attr(data-label) '：';
+      color: var(--fg-faint);
+      font-weight: 400;
+    }
+  }
+
+  .event-note {
+    max-width: 760px;
+    margin: 24px auto 0;
+    color: var(--fg-muted);
+    font-size: 0.9rem;
+  }
+
+  .page-actions {
+    max-width: 760px;
+    margin: 32px auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+</style>

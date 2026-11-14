@@ -1,0 +1,39 @@
+{
+  "_note": "広さ・推奨人数・写真は採寸・撮影後に埋める。photos が空のブースは「写真準備中」を表示する。photos は public/ からのパス",
+  "booths": [
+    {
+      "id": "korean",
+      "name": "韓国セルフ撮影",
+      "en": "KOREAN SELF PHOTO",
+      "size": "",
+      "people": "",
+      "photos": []
+    },
+    {
+      "id": "balletcore",
+      "name": "バレエコア",
+      "en": "BALLETCORE",
+      "size": "",
+      "people": "",
+      "photos": []
+    },
+    {
+      "id": "dansou",
+      "name": "男装向け",
+      "en": "DANSOU",
+      "size": "",
+      "people": "",
+      "photos": []
+    },
+    {
+      "id": "space",
+      "name": "宇宙",
+      "en": "SPACE",
+      "size": "",
+      "people": "",
+      "photos": []
+    }
+  ],
+  "_seasonalNote": "季節限定セット。period は「2026年12月1日〜12月25日」のように書く。items が空のあいだはセクションごと出さない",
+  "seasonal": []
+}

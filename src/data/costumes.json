@@ -1,0 +1,4 @@
+{
+  "_note": "全衣装を載せる。photo は public/ からのパス。dansou は男装用なら true。items が空のあいだは「衣装一覧は準備中」を表示する",
+  "items": []
+}

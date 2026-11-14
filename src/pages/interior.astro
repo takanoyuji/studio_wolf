@@ -1,0 +1,222 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import site from '../data/site.json'
+import data from '../data/booths.json'
+import { studioJsonLd } from '../lib/jsonld'
+
+const title = '内装・ブース｜スタジオ狼（STUDIO WOLF）大阪・日本橋の撮影スタジオ'
+const description =
+  'スタジオ狼の内装。韓国セルフ撮影・バレエコア・男装向け・宇宙の4ブースを、1回のご予約ですべて追加料金なしで使えます。季節限定セットと設備の一覧も掲載。'
+
+type Booth = { id: string; name: string; en: string; size: string; people: string; photos: string[] }
+type Seasonal = { name: string; period: string; photos: string[] }
+const booths = data.booths as Booth[]
+const seasonal = data.seasonal as Seasonal[]
+---
+
+<BaseLayout title={title} description={description} path="/interior" jsonLd={studioJsonLd}>
+  <main class="page star-bg">
+    <div class="section-inner">
+      <p class="page-en">INTERIOR</p>
+      <h1 class="section-title gradient-text">内装・ブース</h1>
+      <p class="section-sub">1回のご予約で4つのブースをすべて使えます（追加料金なし）</p>
+
+      <div class="booths">
+        {
+          booths.map((b) => (
+            <section class="booth glass" id={b.id}>
+              <div class="booth-photos">
+                {b.photos.length > 0 ? (
+                  b.photos.map((p, i) => (
+                    <img src={p} alt={`${b.name}ブースの写真${i + 1}`} width="800" height="600" loading="lazy" />
+                  ))
+                ) : (
+                  <div class="placeholder booth-placeholder">写真準備中</div>
+                )}
+              </div>
+              <div class="booth-body">
+                <p class="booth-en">{b.en}</p>
+                <h2>{b.name}</h2>
+                <dl>
+                  <div>
+                    <dt>広さ</dt>
+                    <dd>{b.size || '採寸中'}</dd>
+                  </div>
+                  <div>
+                    <dt>推奨人数</dt>
+                    <dd>{b.people || '確認中'}</dd>
+                  </div>
+                </dl>
+              </div>
+            </section>
+          ))
+        }
+      </div>
+
+      {
+        seasonal.length > 0 && (
+          <section class="seasonal">
+            <h2 class="sub-title">季節限定セット</h2>
+            <p class="section-sub">常設ブースとは別に設置しています（追加料金なし）</p>
+            <div class="booths">
+              {seasonal.map((s) => (
+                <section class="booth glass">
+                  <div class="booth-photos">
+                    {s.photos.map((p, i) => (
+                      <img src={p} alt={`${s.name}の写真${i + 1}`} width="800" height="600" loading="lazy" />
+                    ))}
+                  </div>
+                  <div class="booth-body">
+                    <h3>{s.name}</h3>
+                    <p class="period">設置期間：{s.period}</p>
+                  </div>
+                </section>
+              ))}
+            </div>
+          </section>
+        )
+      }
+
+      <section class="facilities glass">
+        <h2 class="sub-title">設備</h2>
+        <ul>
+          {site.facilities.map((f) => <li>{f}</li>)}
+        </ul>
+      </section>
+
+      <div class="page-actions">
+        <a href={site.links.reserve} class="btn-primary">
+          <i class="fa-regular fa-calendar-check" aria-hidden="true"></i> Web予約（空き確認・お支払い）
+        </a>
+        <a href={site.links.line} class="btn-line" target="_blank" rel="noopener noreferrer">
+          <i class="fa-brands fa-line" aria-hidden="true"></i> 公式LINEで予約・相談
+        </a>
+        <a href="/" class="btn-secondary">トップへ戻る</a>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .page {
+    padding: calc(var(--header-h) + 40px) 16px 72px;
+    min-height: 60vh;
+  }
+
+  .page-en {
+    text-align: center;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    color: var(--star-300);
+  }
+
+  .booths {
+    display: grid;
+    gap: 20px;
+  }
+
+  @media (min-width: 768px) {
+    .booths {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .booth {
+    overflow: hidden;
+  }
+
+  /* 写真は横にスワイプして見る */
+  .booth-photos {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    aspect-ratio: 4 / 3;
+  }
+
+  .booth-photos img,
+  .booth-placeholder {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    scroll-snap-align: start;
+  }
+
+  .booth-body {
+    padding: 16px 20px 20px;
+  }
+
+  .booth-en {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--star-300);
+  }
+
+  .booth h2,
+  .booth h3 {
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+  }
+
+  .booth dl {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .booth dt {
+    font-size: 0.75rem;
+    color: var(--fg-faint);
+  }
+
+  .booth dd {
+    font-weight: 700;
+  }
+
+  .period {
+    color: var(--fg-muted);
+    font-size: 0.9rem;
+  }
+
+  .sub-title {
+    text-align: center;
+    font-size: 1.4rem;
+    margin: 48px 0 8px;
+  }
+
+  .facilities {
+    margin-top: 48px;
+    padding: 8px 20px 24px;
+  }
+
+  .facilities .sub-title {
+    margin-top: 16px;
+    margin-bottom: 16px;
+  }
+
+  .facilities ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px 16px;
+  }
+
+  .facilities li::before {
+    content: '✦ ';
+    color: var(--neon-purple);
+  }
+
+  @media (min-width: 768px) {
+    .facilities ul {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .page-actions {
+    max-width: 560px;
+    margin: 40px auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+</style>
