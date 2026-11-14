@@ -26,6 +26,7 @@
   "priceRange": "¥1,000〜",
 
   "links": {
+    "reserve": "/reserve",
     "line": "https://lin.ee/UblIDG8",
     "spacemarket": "https://www.spacemarket.com/spaces/patdws5xca6gbsvf/",
     "instabase": "https://www.instabase.jp/space/6514837038",
@@ -34,9 +35,6 @@
     "mapEmbed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6563.509613604946!2d135.50314355!3d34.6608947!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6000e742446b2055%3A0x4a890021a83a6e86!2z6I-K5LmL5aW977yI5qCq77yJ!5e0!3m2!1sja!2sjp!4v1747811546241!5m2!1sja!2sjp"
   },
 
-  "_calendarNote": "予約管理カレンダーのID（例: xxxx@group.calendar.google.com）。公開設定は「予定の有無のみ」。空のあいだは準備中の表示になる",
-  "calendarId": "studiowolf.25@gmail.com",
-  "calendarNotice": "カレンダーの空き状況は目安です。予約状況の反映に時間がかかる場合がございます。ご予約の確定は各予約窓口からの案内をご確認ください。",
 
   "facilities": [
     "撮影用LEDライト",

@@ -27,10 +27,6 @@ const gallery = [
   { img: '/intro-img6.jpg', alt: '配信用のデスクとモニター' },
   { img: '/intro-img4.jpg', alt: '深緑の壁と棚のブース' },
 ]
-
-const calendarSrc = site.calendarId
-  ? `https://calendar.google.com/calendar/embed?src=${encodeURIComponent(site.calendarId)}&ctz=Asia%2FTokyo&mode=WEEK&showTitle=0&showPrint=0&showCalendars=0&showTz=0&hl=ja`
-  : ''
 ---
 
 <BaseLayout title={title} description={site.description} path="/" jsonLd={studioJsonLd}>
@@ -47,12 +43,14 @@ const calendarSrc = site.calendarId
         </h1>
         <p class="hero-lead">大阪・日本橋の撮影スタジオ。<br />近鉄日本橋駅から徒歩6分。</p>
         <div class="hero-actions">
-          <a href={site.links.line} class="btn-line hero-line" target="_blank" rel="noopener noreferrer">
-            <i class="fa-brands fa-line" aria-hidden="true"></i> 予約はこちら（公式LINE）
+          <a href={site.links.reserve} class="btn-primary hero-line">
+            <i class="fa-regular fa-calendar-check" aria-hidden="true"></i> Web予約（空き確認・お支払い）
           </a>
           <div class="hero-sub-actions">
-            <a href="#menu" class="btn-primary">MENU を見る</a>
-            <a href="#calendar" class="btn-secondary">予約状況</a>
+            <a href={site.links.line} class="btn-line" target="_blank" rel="noopener noreferrer">
+              <i class="fa-brands fa-line" aria-hidden="true"></i> LINEで相談
+            </a>
+            <a href="#menu" class="btn-secondary">MENU を見る</a>
           </div>
         </div>
       </div>
@@ -113,10 +111,18 @@ const calendarSrc = site.calendarId
 
         <div class="reserve-main glass">
           <p class="reserve-badge">おすすめ</p>
+          <h3>Web予約</h3>
+          <p>空いている日時を選んで、そのままクレジットカードでお支払いまで進めます。24時間受け付け、ご利用開始の直前まで予約できます。入室方法はメールでお送りします（原則無人でのご利用です）。</p>
+          <a href={site.links.reserve} class="btn-primary">
+            <i class="fa-regular fa-calendar-check" aria-hidden="true"></i> 空きを見て予約する
+          </a>
+        </div>
+
+        <div class="reserve-line glass">
           <h3>公式LINE</h3>
-          <p>友だち追加してメッセージを送るだけ。スタッフ対応（有人）・無人のどちらのご利用も受け付けます。衣装レンタルや深夜の有人対応のご相談もこちらから。</p>
+          <p>スタッフ対応（有人）でのご利用、衣装レンタル、深夜の有人対応のご相談はこちらから。友だち追加してメッセージを送るだけです。</p>
           <a href={site.links.line} class="btn-line" target="_blank" rel="noopener noreferrer">
-            <i class="fa-brands fa-line" aria-hidden="true"></i> 予約はこちら
+            <i class="fa-brands fa-line" aria-hidden="true"></i> LINEで予約・相談
           </a>
         </div>
 
@@ -131,24 +137,6 @@ const calendarSrc = site.calendarId
           </a>
         </div>
         <p class="reserve-note">スタッフの対応時間は日によって異なります。有人でのご利用をご希望の方は、事前に公式LINEでご確認ください。<br />スペースマーケット・インスタベースからのご予約は、各サイトに掲載されている料金・利用条件が適用されます。</p>
-      </div>
-    </section>
-
-    <!-- 予約状況 -->
-    <section class="section star-bg" id="calendar">
-      <div class="section-inner">
-        <h2 class="section-title gradient-text">CALENDAR</h2>
-        <p class="section-sub">予約状況（空いている時間・予約済みの時間）</p>
-        {
-          calendarSrc ? (
-            <div class="calendar-frame calendar-live">
-              <iframe src={calendarSrc} title="スタジオ狼の予約状況カレンダー" loading="lazy" />
-            </div>
-          ) : (
-            <div class="calendar-frame placeholder calendar-placeholder">予約状況カレンダーは準備中です</div>
-          )
-        }
-        <p class="calendar-notice">{site.calendarNotice}</p>
       </div>
     </section>
 
@@ -432,7 +420,7 @@ const calendarSrc = site.calendarId
     margin: 0 auto;
     padding: 28px 20px;
     text-align: center;
-    border-color: rgba(6, 199, 85, 0.5);
+    border-color: rgba(192, 38, 211, 0.6);
     position: relative;
   }
 
@@ -441,7 +429,7 @@ const calendarSrc = site.calendarId
     top: -12px;
     left: 50%;
     transform: translateX(-50%);
-    background: var(--line-green);
+    background: linear-gradient(135deg, var(--neon-violet), var(--neon-purple));
     color: #fff;
     font-size: 0.75rem;
     font-weight: 700;
@@ -461,9 +449,29 @@ const calendarSrc = site.calendarId
     text-align: left;
   }
 
-  .reserve-main .btn-line {
+  .reserve-main .btn-primary,
+  .reserve-line .btn-line {
     width: 100%;
     font-size: 1.05rem;
+  }
+
+  .reserve-line {
+    max-width: 560px;
+    margin: 16px auto 0;
+    padding: 22px 20px;
+    text-align: center;
+  }
+
+  .reserve-line h3 {
+    font-size: 1.1rem;
+    margin-bottom: 6px;
+  }
+
+  .reserve-line p {
+    color: var(--fg-muted);
+    font-size: 0.85rem;
+    margin-bottom: 16px;
+    text-align: left;
   }
 
   .reserve-sites {
@@ -500,33 +508,6 @@ const calendarSrc = site.calendarId
   .reserve-note {
     max-width: 560px;
     margin: 16px auto 0;
-    font-size: 0.82rem;
-    color: var(--fg-muted);
-  }
-
-  /* 予約状況 */
-  .calendar-frame {
-    border-radius: 1rem;
-    overflow: hidden;
-  }
-
-  .calendar-live {
-    background: #fff;
-    height: 620px;
-  }
-
-  .calendar-frame iframe {
-    width: 100%;
-    height: 100%;
-    border: 0;
-  }
-
-  .calendar-placeholder {
-    height: 240px;
-  }
-
-  .calendar-notice {
-    margin-top: 12px;
     font-size: 0.82rem;
     color: var(--fg-muted);
   }

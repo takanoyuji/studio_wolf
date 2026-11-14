@@ -66,7 +66,7 @@ const nav = [
         <ul>
           {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
           <li>
-            <a href={site.links.line} class="nav-line" target="_blank" rel="noopener noreferrer">LINEで予約</a>
+            <a href={site.links.reserve} class="nav-line">Web予約</a>
           </li>
         </ul>
       </nav>
@@ -85,13 +85,14 @@ const nav = [
       <p class="footer-links">
         <a href="/guide">ご利用案内</a>
         <a href="/tokusho">特定商取引法に基づく表記</a>
+        <a href="/reserve/privacy">プライバシーポリシー</a>
       </p>
       <small>© 2025 スタジオ狼（STUDIO WOLF）</small>
     </footer>
 
     <!-- スマホで常に見える予約ボタン -->
-    <a href={site.links.line} class="floating-line" target="_blank" rel="noopener noreferrer">
-      <i class="fa-brands fa-line" aria-hidden="true"></i> LINEで予約
+    <a href={site.links.reserve} class="floating-line">
+      <i class="fa-regular fa-calendar-check" aria-hidden="true"></i> Web予約（空き確認・お支払い）
     </a>
 
     <script>
@@ -396,7 +397,7 @@ const nav = [
     text-align: center;
     border: none;
     border-radius: 9999px;
-    background: var(--line-green);
+    background: linear-gradient(135deg, var(--neon-violet), var(--neon-purple));
     font-weight: 700;
   }
 
@@ -482,7 +483,7 @@ const nav = [
     gap: 8px;
     min-height: 52px;
     border-radius: 9999px;
-    background: var(--line-green);
+    background: linear-gradient(135deg, var(--neon-violet), var(--neon-purple));
     color: #fff;
     font-weight: 700;
     text-decoration: none;
