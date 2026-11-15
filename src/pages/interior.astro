@@ -1,17 +1,17 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
 import site from '../data/site.json'
-import data from '../data/booths.json'
 import { studioJsonLd } from '../lib/jsonld'
 
 const title = '内装・ブース｜スタジオ狼（STUDIO WOLF）大阪・日本橋の撮影スタジオ'
 const description =
   'スタジオ狼の内装。韓国セルフ撮影・バレエコア・男装向け・宇宙の4ブースを、1回のご予約ですべて追加料金なしで使えます。季節限定セットと設備の一覧も掲載。'
 
-type Booth = { id: string; name: string; en: string; size: string; people: string; photos: string[] }
-type Seasonal = { name: string; period: string; photos: string[] }
-const booths = data.booths as Booth[]
-const seasonal = data.seasonal as Seasonal[]
+// ブース（名前・広さ・写真）は予約アプリの管理画面で変える。nginx の SSI が /_site/booths を差し込む
+// （deploy は oshiplus-pay の deploy/nginx/studio-wolf-reserve.conf）。読めないときは stub を出す
+const boothsSsi =
+  '<!--# block name="booths_stub" --><p class="booths-error">ブースの情報を読み込めませんでした。時間をおいて開き直してください。</p><!--# endblock -->' +
+  '<!--# include virtual="/_site/booths" stub="booths_stub" -->'
 ---
 
 <BaseLayout title={title} description={description} path="/interior" jsonLd={studioJsonLd}>
@@ -19,63 +19,11 @@ const seasonal = data.seasonal as Seasonal[]
     <div class="section-inner">
       <p class="page-en">INTERIOR</p>
       <h1 class="section-title gradient-text">内装・ブース</h1>
-      <p class="section-sub">1回のご予約で4つのブースをすべて使えます（追加料金なし）</p>
+      <p class="section-sub">1回のご予約で、すべてのブースを追加料金なしで使えます</p>
 
       <div class="booths">
-        {
-          booths.map((b) => (
-            <section class="booth glass" id={b.id}>
-              <div class="booth-photos">
-                {b.photos.length > 0 ? (
-                  b.photos.map((p, i) => (
-                    <img src={p} alt={`${b.name}ブースの写真${i + 1}`} width="800" height="600" loading="lazy" />
-                  ))
-                ) : (
-                  <div class="placeholder booth-placeholder">写真準備中</div>
-                )}
-              </div>
-              <div class="booth-body">
-                <p class="booth-en">{b.en}</p>
-                <h2>{b.name}</h2>
-                <dl>
-                  <div>
-                    <dt>広さ</dt>
-                    <dd>{b.size || '採寸中'}</dd>
-                  </div>
-                  <div>
-                    <dt>推奨人数</dt>
-                    <dd>{b.people || '確認中'}</dd>
-                  </div>
-                </dl>
-              </div>
-            </section>
-          ))
-        }
+        <Fragment set:html={boothsSsi} />
       </div>
-
-      {
-        seasonal.length > 0 && (
-          <section class="seasonal">
-            <h2 class="sub-title">季節限定セット</h2>
-            <p class="section-sub">常設ブースとは別に設置しています（追加料金なし）</p>
-            <div class="booths">
-              {seasonal.map((s) => (
-                <section class="booth glass">
-                  <div class="booth-photos">
-                    {s.photos.map((p, i) => (
-                      <img src={p} alt={`${s.name}の写真${i + 1}`} width="800" height="600" loading="lazy" />
-                    ))}
-                  </div>
-                  <div class="booth-body">
-                    <h3>{s.name}</h3>
-                    <p class="period">設置期間：{s.period}</p>
-                  </div>
-                </section>
-              ))}
-            </div>
-          </section>
-        )
-      }
 
       <section class="facilities glass">
         <h2 class="sub-title">設備</h2>
@@ -121,63 +69,6 @@ const seasonal = data.seasonal as Seasonal[]
     }
   }
 
-  .booth {
-    overflow: hidden;
-  }
-
-  /* 写真は横にスワイプして見る */
-  .booth-photos {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    aspect-ratio: 4 / 3;
-  }
-
-  .booth-photos img,
-  .booth-placeholder {
-    flex: 0 0 100%;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    scroll-snap-align: start;
-  }
-
-  .booth-body {
-    padding: 16px 20px 20px;
-  }
-
-  .booth-en {
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
-    color: var(--star-300);
-  }
-
-  .booth h2,
-  .booth h3 {
-    font-size: 1.3rem;
-    margin-bottom: 8px;
-  }
-
-  .booth dl {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-
-  .booth dt {
-    font-size: 0.75rem;
-    color: var(--fg-faint);
-  }
-
-  .booth dd {
-    font-weight: 700;
-  }
-
-  .period {
-    color: var(--fg-muted);
-    font-size: 0.9rem;
-  }
-
   .sub-title {
     text-align: center;
     font-size: 1.4rem;
@@ -218,5 +109,66 @@ const seasonal = data.seasonal as Seasonal[]
     display: flex;
     flex-direction: column;
     gap: 12px;
+  }
+</style>
+
+<!-- ブースの HTML は SSI で差し込むので、Astro のスコープが付かない。.booths の下だけに効かせる -->
+<style is:global>
+  .booths .booth {
+    overflow: hidden;
+  }
+
+  /* 写真は横にスワイプして見る */
+  .booths .booth-photos {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    aspect-ratio: 4 / 3;
+  }
+
+  .booths .booth-photos img,
+  .booths .booth-placeholder {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    scroll-snap-align: start;
+  }
+
+  .booths .booth-body {
+    padding: 16px 20px 20px;
+  }
+
+  .booths .booth-en {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--star-300);
+  }
+
+  .booths .booth h2,
+  .booths .booth h3 {
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+  }
+
+  .booths .booth dl {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .booths .booth dt {
+    font-size: 0.75rem;
+    color: var(--fg-faint);
+  }
+
+  .booths .booth dd {
+    font-weight: 700;
+  }
+
+  .booths .booths-error {
+    color: var(--fg-muted);
+    font-size: 0.9rem;
+    text-align: center;
   }
 </style>

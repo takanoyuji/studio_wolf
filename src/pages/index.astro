@@ -6,10 +6,11 @@ import { studioJsonLd } from '../lib/jsonld'
 const title = 'スタジオ狼（STUDIO WOLF）｜24時間商用利用OKの撮影スタジオ 大阪・日本橋'
 
 // 星狼のキャスト一覧と同じ見せ方（縦長カード＋下に名前）。押すと詳細ページへ
+// 写真は予約アプリの管理画面で差し替える（/media/{key}）。写真が無い枠は 404 になり、下のアイコンが見える
 const menu = [
-  { href: '/price', title: '価格表', en: 'PRICE', sub: 'シェア 1名1時間 1,000円〜', img: '', icon: 'fa-solid fa-yen-sign' },
-  { href: '/interior', title: '内装', en: 'INTERIOR', sub: '4つのブースと設備', img: '/intro-img1.jpg', icon: '' },
-  { href: '/costume', title: 'レンタル衣装', en: 'COSTUME', sub: '1名2着まで無料', img: '', icon: 'fa-solid fa-shirt' },
+  { href: '/price', title: '価格表', en: 'PRICE', sub: 'シェア 1名1時間 1,000円〜', key: 'menu-price', icon: 'fa-solid fa-yen-sign' },
+  { href: '/interior', title: '内装', en: 'INTERIOR', sub: 'ブースと設備', key: 'menu-interior', icon: 'fa-solid fa-camera' },
+  { href: '/costume', title: 'レンタル衣装', en: 'COSTUME', sub: '1名2着まで無料', key: 'menu-costume', icon: 'fa-solid fa-shirt' },
 ]
 
 const features = [
@@ -19,14 +20,8 @@ const features = [
   { head: '衣装2着無料', body: 'レンタル衣装は1名2着まで無料です' },
 ]
 
-const gallery = [
-  { img: '/intro-img1.jpg', alt: '黄色と緑の椅子を置いたブース' },
-  { img: '/intro-img5.jpg', alt: 'パステルカラーの椅子と壁のブース' },
-  { img: '/intro-img8.jpg', alt: 'ネオンの十字架とカーテンのブース' },
-  { img: '/intro-img2.jpg', alt: 'カラフルなリボンを垂らした壁面' },
-  { img: '/intro-img6.jpg', alt: '配信用のデスクとモニター' },
-  { img: '/intro-img4.jpg', alt: '深緑の壁と棚のブース' },
-]
+// トップの写真。予約アプリの管理画面で差し替える（/media/gallery-N。未設定なら元の写真）
+const gallery = [1, 2, 3, 4, 5, 6].map((n) => ({ img: `/media/gallery-${n}`, alt: `スタジオ狼の撮影ブースの写真${n}` }))
 ---
 
 <BaseLayout title={title} description={site.description} path="/" jsonLd={studioJsonLd}>
@@ -81,13 +76,10 @@ const gallery = [
               <li>
                 <a href={m.href} class="menu-card glass">
                   <div class="menu-thumb">
-                    {m.img ? (
-                      <img src={m.img} alt="" width="600" height="800" loading="lazy" />
-                    ) : (
-                      <div class="placeholder menu-icon">
-                        <i class={m.icon} aria-hidden="true" />
-                      </div>
-                    )}
+                    <div class="placeholder menu-icon">
+                      <i class={m.icon} aria-hidden="true" />
+                    </div>
+                    <img src={`/media/${m.key}`} alt="" width="600" height="800" loading="lazy" onerror="this.remove()" />
                     <div class="menu-shade" />
                     <div class="menu-label">
                       <span class="menu-en">{m.en}</span>
